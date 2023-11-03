@@ -6,6 +6,8 @@ TagManager:
   tags:
   - MoonCoin
   - Hero
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
