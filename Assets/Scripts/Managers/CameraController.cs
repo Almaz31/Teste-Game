@@ -12,15 +12,20 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float followSpeed = 1f;
     [SerializeField] private Vector3 offset;
+    [SerializeField] private float damping = 1;
 
     private void Start()
     {
-        offset = transform.position - target.position;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        Vector3 targetPosition = target.position + offset;
-        transform.DOMove(targetPosition, 0.1f * followSpeed); // Застосовуємо рух камери з плавним переходом
+        float currentAngle = transform.eulerAngles.y;
+        float desiredAngle = target.transform.eulerAngles.y;
+        float angle = Mathf.LerpAngle(currentAngle, desiredAngle, Time.deltaTime * damping);
+
+        Quaternion rotation = Quaternion.Euler(0, angle, 0);
+        transform.position = target.transform.position - (rotation * offset);
+
     }
 }

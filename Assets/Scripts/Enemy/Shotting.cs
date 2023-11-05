@@ -13,17 +13,16 @@ public class Shotting : MonoBehaviour
 
     void Update()
     {
-        // Визначаємо відстань між гравцем і точкою появи пулі
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         // Перевіряємо, чи гравець знаходиться на достатній відстані для пострілу
         if (distanceToPlayer < 10f && canShoot)
         {
-            // Створюємо пулю
-            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
-
             // Отримуємо напрямок до гравця
             Vector3 directionToPlayer = (player.position - bulletSpawn.position).normalized;
+
+            // Створюємо пулю з правильним напрямком
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.LookRotation(directionToPlayer));
 
             // Налаштовуємо швидкість пулі
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
@@ -31,7 +30,6 @@ public class Shotting : MonoBehaviour
 
             // Запускаємо корутину для обмеження швидкості пострілу
             StartCoroutine(ShootCooldown());
-            
         }
         transform.LookAt(player);
     }

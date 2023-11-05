@@ -4,16 +4,9 @@ using DG.Tweening;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed=1;
-    private Rigidbody rb;
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     private void Update()
     {
-        // Отримуємо введення від клавіатури
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -25,6 +18,10 @@ public class Movement : MonoBehaviour
         {
             Vector3 targetPosition = transform.position + movement * moveSpeed;
             transform.DOMove(targetPosition, 0.5f); // 0.5f - час, за який відбудеться рух
+
+            // Націлюємо об'єкт гравця на ціль
+            transform.LookAt(targetPosition);
         }
     }
 }
+    
