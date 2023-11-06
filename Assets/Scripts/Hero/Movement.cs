@@ -4,24 +4,29 @@ using DG.Tweening;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed=1;
+    [SerializeField,Range(0,1)] private float dumping;
 
-    private void Update()
+    private Vector3 currentVelocity = Vector3.zero;
+    private Rigidbody rb;
+    
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+    private void FixedUpdate()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        // Обчислюємо напрямок руху
-        Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
+        Vector3 movement = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        Vector3 targetVelocity = new Vector3(movement.x * moveSpeed, rb.velocity.y, movement.z * moveSpeed);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, 0.1f);
 
-        // Застосовуємо рух до об'єкта з використанням DoTween
         if (movement != Vector3.zero)
         {
-            Vector3 targetPosition = transform.position + movement * moveSpeed;
-            transform.DOMove(targetPosition, 0.5f); // 0.5f - час, за який відбудеться рух
-
-            // Націлюємо об'єкт гравця на ціль
-            transform.LookAt(targetPosition);
+            transform.rotation = Quaternion.LookRotation(movement);
         }
     }
+
 }
     

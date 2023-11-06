@@ -6,6 +6,8 @@ public class ReactionSphere : MonoBehaviour
 {
 
     private float delayTime = 0f;
+    [SerializeField]private float maxTime = 1f;
+    [SerializeField,Range(0,1)] private float slowPower = 0.5f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,7 +19,7 @@ public class ReactionSphere : MonoBehaviour
             }
             else
             {
-                delayTime = 1f;
+                delayTime = maxTime;
             }
         }
     }
@@ -25,7 +27,7 @@ public class ReactionSphere : MonoBehaviour
     IEnumerator SlowTime()
     {
         Time.timeScale = 0.5f;
-        yield return new WaitForSeconds(1f - delayTime);
+        yield return new WaitForSeconds(maxTime - delayTime);
         Time.timeScale = 1f;
         delayTime = 0f;
     }
